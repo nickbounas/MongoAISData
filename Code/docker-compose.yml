@@ -1,0 +1,32 @@
+# Use root/example as user/password credentials
+version: '3.3'
+
+services:
+  ais_analytics:
+    build:
+      context: .
+    ports:
+      - "8000:80"
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    networks:
+      - ais_analytics_net
+
+  ais-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.v
+    environment:
+      VUE_APP_API_URL: http://127.0.0.1:8000
+  
+    ports:
+      - 91:80
+    networks:
+      - ais_analytics_net
+
+
+networks:
+  ais_analytics_net:
+    driver: bridge
